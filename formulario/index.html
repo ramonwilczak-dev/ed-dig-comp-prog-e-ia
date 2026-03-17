@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastro Empresarial - Fornecedor / Parceiro</title>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #4338ca;
+      --accent: #10b981;
+      --text: #1f2937;
+      --gray: #6b7280;
+      --light: #f3f4f6;
+      --danger: #ef4444;
+    }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+      color: var(--text);
+      margin: 0;
+      padding: 20px 10px;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .header {
+      background: var(--primary);
+      color: white;
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 2.1rem;
+    }
+    .header p {
+      margin: 8px 0 0;
+      opacity: 0.9;
+      font-size: 1.05rem;
+    }
+    .form-content {
+      padding: 2.5rem 2rem;
+    }
+    fieldset {
+      border: none;
+      margin: 0 0 2.5rem;
+      padding: 0;
+    }
+    legend {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 1.2rem;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 0.5rem;
+      width: fit-content;
+    }
+    .grid-2, .grid-3 {
+      display: grid;
+      gap: 1.5rem;
+    }
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--gray);
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+    }
+    .required::after {
+      content: " *";
+      color: var(--danger);
+    }
+    .checkbox-group {
+      margin: 1rem 0;
+    }
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: normal;
+      color: var(--text);
+    }
+    button[type="submit"] {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 1.1rem 2.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      width: 100%;
+      max-width: 400px;
+      margin: 2rem auto 0;
+      display: block;
+    }
+    button[type="submit"]:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(79,70,229,0.25);
+    }
+    .error {
+      color: var(--danger);
+      font-size: 0.9rem;
+      margin-top: 0.3rem;
+      display: none;
+    }
+    @media (max-width: 768px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Cadastro Empresarial</h1>
+    <p>Fornecedor / Parceiro / Cliente - Dados Cadastrais</p>
+  </div>
+
+  <form id="cadastroForm" class="form-content" novalidate>
+
+    <!-- Dados Básicos da Empresa -->
+    <fieldset>
+      <legend>Dados da Empresa</legend>
+      <div class="grid-2">
+        <div>
+          <label for="razaoSocial" class="required">Razão Social</label>
+          <input type="text" id="razaoSocial" name="razaoSocial" required placeholder="Ex: Empresa Exemplo Ltda" />
+          <div class="error" id="razaoSocialError">Campo obrigatório</div>
+        </div>
+        <div>
+          <label for="nomeFantasia">Nome Fantasia</label>
+          <input type="text" id="nomeFantasia" name="nomeFantasia" placeholder="Ex: Exemplo Store" />
+        </div>
+      </div>
+      <div class="grid-3">
+        <div>
+          <label for="cnpj" class="required">CNPJ</label>
+          <input type="text" id="cnpj" name="cnpj" required placeholder="00.000.000/0001-00" maxlength="18" />
+          <div class="error" id="cnpjError">CNPJ inválido ou obrigatório</div>
+        </div>
+        <div>
+          <label for="inscricaoEstadual">Inscrição Estadual</label>
+          <input type="text" id="inscricaoEstadual" name="inscricaoEstadual" placeholder="Isento ou número" />
+        </div>
+        <div>
+          <label for="dataAbertura">Data de Abertura</label>
+          <input type="date" id="dataAbertura" name="dataAbertura" />
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Endereço -->
+    <fieldset>
+      <legend>Endereço da Empresa</legend>
+      <div class="grid-3">
+        <div>
+          <label for="cep" class="required">CEP</label>
+          <input type="text" id="cep" name="cep" required placeholder="00000-000" maxlength="9" />
+          <div class="error" id="cepError">CEP obrigatório</div>
+        </div>
+        <div>
+          <label for="logradouro">Logradouro</label>
+          <input type="text" id="logradouro" name="logradouro" readonly />
+        </div>
+        <div>
+          <label for="numero">Número</label>
+          <input type="text" id="numero" name="numero" />
+        </div>
+      </div>
+      <div class="grid-3">
+        <div>
+          <label for="complemento">Complemento</label>
+          <input type="text" id="complemento" name="complemento" />
+        </div>
+        <div>
+          <label for="bairro">Bairro</label>
+          <input type="text" id="bairro" name="bairro" readonly />
+        </div>
+        <div>
+          <label for="cidade">Cidade</label>
+          <input type="text" id="cidade" name="cidade" readonly />
+        </div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <label for="uf">UF</label>
+          <input type="text" id="uf" name="uf" maxlength="2" readonly />
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Contato -->
+    <fieldset>
+      <legend>Contato Principal</legend>
+      <div class="grid-2">
+        <div>
+          <label for="email" class="required">E-mail Corporativo</label>
+          <input type="email" id="email" name="email" required placeholder="contato@empresa.com.br" />
+        </div>
+        <div>
+          <label for="telefone" class="required">Telefone / WhatsApp</label>
+          <input type="tel" id="telefone" name="telefone" required placeholder="(41) 99999-9999" />
+        </div>
+      </div>
+      <div>
+        <label for="site">Site / LinkedIn / Redes Sociais</label>
+        <input type="url" id="site" name="site" placeholder="https://www.empresa.com.br" />
+      </div>
+    </fieldset>
+
+    <!-- Representante Legal -->
+    <fieldset>
+      <legend>Representante Legal / Responsável</legend>
+      <div class="grid-2">
+        <div>
+          <label for="nomeRepresentante" class="required">Nome Completo</label>
+          <input type="text" id="nomeRepresentante" name="nomeRepresentante" required />
+        </div>
+        <div>
+          <label for="cargo">Cargo</label>
+          <input type="text" id="cargo" name="cargo" placeholder="Diretor / Sócio / Procurador" />
+        </div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <label for="cpfRepresentante">CPF</label>
+          <input type="text" id="cpfRepresentante" name="cpfRepresentante" placeholder="000.000.000-00" maxlength="14" />
+        </div>
+        <div>
+          <label for="emailRepresentante">E-mail do Responsável</label>
+          <input type="email" id="emailRepresentante" name="emailRepresentante" />
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Informações Fiscais e Bancárias -->
+    <fieldset>
+      <legend>Informações Fiscais e Bancárias</legend>
+      <div class="grid-3">
+        <div>
+          <label for="porteEmpresa">Porte da Empresa</label>
+          <select id="porteEmpresa" name="porteEmpresa">
+            <option value="">Selecione</option>
+            <option value="micro">Microempresa (ME)</option>
+            <option value="mei">MEI</option>
+            <option value="epp">Empresa de Pequeno Porte (EPP)</option>
+            <option value="media">Média Empresa</option>
+            <option value="grande">Grande Empresa</option>
+          </select>
+        </div>
+        <div>
+          <label for="regimeTributario">Regime Tributário</label>
+          <select id="regimeTributario" name="regimeTributario">
+            <option value="">Selecione</option>
+            <option value="simples">Simples Nacional</option>
+            <option value="lucroPresumido">Lucro Presumido</option>
+            <option value="lucroReal">Lucro Real</option>
+          </select>
+        </div>
+        <div>
+          <label for="naturezaJuridica">Natureza Jurídica</label>
+          <select id="naturezaJuridica" name="naturezaJuridica">
+            <option value="">Selecione</option>
+            <option value="2062">Sociedade Empresária Limitada (LTDA)</option>
+            <option value="2305">Empresário Individual</option>
+            <option value="2135">EIRELI (extinta)</option>
+            <option value="2240">Sociedade Simples Limitada</option>
+            <option value="2313">MEI</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div>
+          <label for="banco">Banco</label>
+          <input type="text" id="banco" name="banco" placeholder="Ex: 001 - Banco do Brasil" />
+        </div>
+        <div>
+          <label for="agencia">Agência</label>
+          <input type="text" id="agencia" name="agencia" placeholder="0000" />
+        </div>
+        <div>
+          <label for="conta">Conta + DV</label>
+          <input type="text" id="conta" name="conta" placeholder="000000-0" />
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Conformidade -->
+    <fieldset>
+      <legend>Conformidade e Declarações</legend>
+      <div class="checkbox-group">
+        <label>
+          <input type="checkbox" id="lgpd" name="lgpd" required />
+          Autorizo o tratamento dos dados pessoais conforme LGPD (Lei nº 13.709/2018)
+        </label>
+        <label>
+          <input type="checkbox" id="declaracao" name="declaracao" required />
+          Declaro que as informações acima são verdadeiras e que a empresa está regular
+        </label>
+      </div>
+    </fieldset>
+
+    <button type="submit">Enviar Cadastro para Análise</button>
+  </form>
+</div>
+
+<script>
+// Máscaras simples
+function mascaraCNPJ(el) {
+  let v = el.value.replace(/\D/g, '');
+  v = v.replace(/^(\d{2})(\d)/, '$1.$2');
+  v = v.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+  v = v.replace(/\.(\d{3})(\d)/, '.$1/$2');
+  v = v.replace(/(\d{4})(\d)/, '$1-$2');
+  el.value = v.substring(0, 18);
+}
+
+function mascaraCEP(el) {
+  let v = el.value.replace(/\D/g, '');
+  v = v.replace(/^(\d{5})(\d)/, '$1-$2');
+  el.value = v.substring(0, 9);
+}
+
+function mascaraTelefone(el) {
+  let v = el.value.replace(/\D/g, '');
+  v = v.replace(/^(\d{2})(\d)/g, '($1) $2');
+  v = v.replace(/(\d)(\d{4})$/, '$1-$2');
+  el.value = v.substring(0, 15);
+}
+
+// Consulta CEP via API viacep.com.br
+document.getElementById('cep').addEventListener('blur', function() {
+  const cep = this.value.replace(/\D/g, '');
+  if (cep.length !== 8) return;
+
+  fetch(`https://viacep.com.br/ws/${cep}/json/`)
+    .then(res => res.json())
+    .then(data => {
+      if (!data.erro) {
+        document.getElementById('logradouro').value = data.logradouro;
+        document.getElementById('bairro').value = data.bairro;
+        document.getElementById('cidade').value = data.localidade;
+        document.getElementById('uf').value = data.uf;
+      } else {
+        alert('CEP não encontrado.');
+      }
+    })
+    .catch(() => alert('Erro ao consultar CEP.'));
+});
+
+// Validações básicas no submit
+document.getElementById('cadastroForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  let valido = true;
+
+  // Exemplo de validação CNPJ simples
+  const cnpj = document.getElementById('cnpj').value.replace(/\D/g, '');
+  if (cnpj.length !== 14) {
+    document.getElementById('cnpjError').style.display = 'block';
+    valido = false;
+  } else {
+    document.getElementById('cnpjError').style.display = 'none';
+  }
+
+  // Outras validações...
+
+  if (valido) {
+    alert('Cadastro enviado com sucesso! Em breve nossa equipe entrará em contato.');
+    // Aqui você pode adicionar fetch para enviar ao backend
+    // Ex: fetch('/api/cadastro', { method: 'POST', body: new FormData(this) })
+  }
+});
+
+// Aplica máscaras
+document.getElementById('cnpj').addEventListener('input', e => mascaraCNPJ(e.target));
+document.getElementById('cep').addEventListener('input', e => mascaraCEP(e.target));
+document.getElementById('telefone').addEventListener('input', e => mascaraTelefone(e.target));
+</script>
+
+</body>
+</html>
