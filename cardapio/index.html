@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cafuné — Cardápio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:100%;min-height:100vh;background:#F9F4F2;font-family:'Lato',sans-serif;}
+
+  nav{background:#7D2E2E;display:flex;align-items:center;justify-content:space-between;padding:0 4rem;height:64px;position:sticky;top:0;z-index:100;}
+  nav .logo{font-family:'Playfair Display',serif;color:#EFBCB0;font-size:24px;font-style:italic;letter-spacing:3px;}
+  nav .nav-links{display:flex;gap:2.5rem;}
+  nav .nav-links a{color:#F9F4F2;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;text-decoration:none;opacity:0.8;transition:opacity 0.2s;}
+  nav .nav-links a:hover{opacity:1;color:#EFBCB0;}
+  nav .cart-icon{background:#EFBCB0;color:#7D2E2E;border:none;border-radius:20px;padding:6px 18px;font-family:'Lato',sans-serif;font-weight:700;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;}
+
+  .hero{background:#7D2E2E;display:flex;align-items:center;justify-content:space-between;padding:4rem 6rem;min-height:320px;}
+  .hero-text .eyebrow{font-family:'Playfair Display',serif;font-style:italic;color:#EFBCB0;font-size:16px;letter-spacing:3px;margin-bottom:10px;}
+  .hero-text h1{font-family:'Playfair Display',serif;font-style:italic;color:#F9F4F2;font-size:60px;line-height:1.05;margin-bottom:14px;}
+  .hero-text .subtitle{font-weight:700;color:#EFBCB0;font-size:13px;letter-spacing:5px;text-transform:uppercase;margin-bottom:24px;}
+  .hero-price{display:inline-block;background:#EFBCB0;color:#7D2E2E;font-weight:700;font-size:20px;padding:10px 24px;border-radius:6px;font-family:'Playfair Display',serif;}
+  .hero-plate{width:240px;height:240px;border-radius:50%;background:#9B3D3D;display:flex;align-items:center;justify-content:center;border:5px solid #EFBCB0;flex-shrink:0;}
+
+  .filter-bar{background:#F9F4F2;padding:1.5rem 4rem;display:flex;gap:12px;border-bottom:1px solid #E8D5D0;flex-wrap:wrap;}
+  .filter-btn{background:transparent;border:1px solid #D4837A;color:#7D2E2E;padding:7px 20px;border-radius:20px;font-family:'Lato',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s;}
+  .filter-btn:hover,.filter-btn.active{background:#7D2E2E;color:#F9F4F2;border-color:#7D2E2E;}
+
+  .section{padding:2.5rem 4rem 4rem;}
+  .section-title{font-weight:700;font-size:12px;letter-spacing:5px;text-transform:uppercase;color:#7D2E2E;margin-bottom:1.8rem;padding-bottom:10px;border-bottom:2px solid #EFBCB0;display:inline-block;}
+  .menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:18px;}
+  .card{background:#fff;border-radius:14px;overflow:hidden;display:flex;border:1px solid #F0DDD9;transition:transform 0.2s,box-shadow 0.2s;cursor:default;}
+  .card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(125,46,46,0.12);}
+  .card.reverse{flex-direction:row-reverse;}
+  .card-img{width:140px;min-height:120px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .card-body{flex:1;padding:18px;display:flex;flex-direction:column;justify-content:space-between;}
+  .card-tag{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#D4837A;margin-bottom:4px;}
+  .card-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#3D1A1A;margin-bottom:7px;}
+  .card-desc{font-size:13px;color:#999;line-height:1.55;flex:1;}
+  .card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:14px;}
+  .card-price{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#7D2E2E;}
+  .btn-add{background:#7D2E2E;color:#F9F4F2;border:none;border-radius:7px;padding:7px 16px;font-size:13px;font-family:'Lato',sans-serif;font-weight:700;cursor:pointer;transition:background 0.2s;}
+  .btn-add:hover{background:#9B3D3D;}
+  .btn-add.added{background:#2E7D52;}
+
+  .cart-bar{background:#3D1A1A;color:#F9F4F2;padding:14px 4rem;display:flex;align-items:center;justify-content:space-between;position:sticky;bottom:0;z-index:99;}
+  .cart-bar.hidden{display:none;}
+  .cart-info{font-size:14px;color:#EFBCB0;}
+  .cart-total{font-family:'Playfair Display',serif;font-size:20px;}
+  .btn-checkout{background:#EFBCB0;color:#7D2E2E;border:none;border-radius:8px;padding:10px 28px;font-family:'Lato',sans-serif;font-weight:700;font-size:14px;cursor:pointer;}
+  .btn-checkout:hover{background:#F9F4F2;}
+
+  footer{background:#3D1A1A;color:#EFBCB0;text-align:center;padding:2.5rem 2rem;}
+  footer .f-logo{font-family:'Playfair Display',serif;font-style:italic;font-size:28px;color:#F9F4F2;margin-bottom:10px;}
+  footer p{font-size:13px;line-height:2;opacity:0.75;letter-spacing:0.5px;}
+  footer .divider{width:40px;height:2px;background:#EFBCB0;margin:12px auto;}
+
+  @media(max-width:768px){
+    nav{padding:0 1.5rem;}
+    .hero{padding:2.5rem 1.5rem;flex-direction:column;gap:2rem;text-align:center;}
+    .hero-text h1{font-size:38px;}
+    .filter-bar,.section{padding-left:1.5rem;padding-right:1.5rem;}
+    .menu-grid{grid-template-columns:1fr;}
+    .cart-bar{padding:12px 1.5rem;flex-direction:column;gap:10px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">Cafuné</span>
+  <div class="nav-links">
+    <a href="#hero">Início</a>
+    <a href="#menu">Cardápio</a>
+    <a href="#footer">Contato</a>
+  </div>
+  <button class="cart-icon" onclick="document.getElementById('cartBar').scrollIntoView({behavior:'smooth'})">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7D2E2E" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    Pedido (<span id="navCount">0</span>)
+  </button>
+</nav>
+
+<div class="hero" id="hero">
+  <img src="" alt="">
+  <div class="hero-text">
+    <div class="eyebrow">prato do dia</div>
+    <h1>Lombo com<br>Cereja</h1>
+    <div class="subtitle">Chef's Special</div>
+    <div class="hero-price">R$ 325,50</div>
+  </div>
+  <div class="hero-plate">
+    <img src="lombo.jpeg" style="width: 100%; border-radius: 50%;">
+  </div>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-btn active" data-cat="todos">Todos</button>
+  <button class="filter-btn" data-cat="promocao">Promoções</button>
+  <button class="filter-btn" data-cat="carne">Carnes</button>
+  <button class="filter-btn" data-cat="especial">Especiais</button>
+</div>
+
+<div class="section" id="menu">
+  <div class="section-title" id="sectionLabel">Todos os pratos</div>
+  <div class="menu-grid" id="grid"></div>
+</div>
+
+<div class="cart-bar hidden" id="cartBar">
+  <div class="cart-info"><span id="cartCount">0</span> item(s) selecionado(s)</div>
+  <div class="cart-total">Total: R$ <span id="cartTotal">0,00</span></div>
+  <button class="btn-checkout" onclick="alert('Pedido realizado! Em breve entraremos em contato.')">Finalizar pedido</button>
+</div>
+
+<footer id="footer">
+  <div class="f-logo">Cafuné</div>
+  <div class="divider"></div>
+  <p>Seg a Sex: 11h – 23h &nbsp;|&nbsp; Sáb e Dom: 10h – 00h</p>
+  <p>Curitiba, Paraná &nbsp;·&nbsp; (41) 99999-0000</p>
+  <p style="margin-top:14px;font-size:12px;opacity:0.4;">© 2026 Cafuné Restaurante</p>
+  
+</footer>
+
+<script>
+const items = [
+  {id:1, name:'Lombo com Cereja', tag:'Prato do dia', desc:'Lombo de carneiro grelhado com redução de cereja, purê de mandioquinha e chips de batata-doce.', price:325.50, cat:'especial', color:'#D4837A'},
+  {id:2, name:'Medalhão de Músico', tag:'Promoção', desc:'Medalhão ao molho de cogumelos paris com batatas rústicas no alecrim e legumes salteados.', price:258.00, cat:'carne', color:'#C77070'},
+  {id:3, name:'Jámon', tag:'Especial', desc:'Massa artesanal com limão siciliano, alecrim fresco, queijo de cabra e azeite trufado.', price:325.50, cat:'especial', color:'#D4837A'},
+  {id:4, name:'Picanha Assada', tag:'Promoção', desc:'Picanha grelhada na brasa, acompanha vinagrete da casa, farofa crocante e arroz branco.', price:380.00, cat:'carne', color:'#C77070'},
+  {id:5,  name:'Alcatra Grelhada', tag:'Promoção', desc:'Corte nobre grelhado no ponto, acompanha arroz negro e salada de folhas com agrião.', price:250.00, cat:'carne', color:'#C77070'},
+];
+
+let cart = {};
+
+function plateSVG(color, id){
+  const variants = [
+    `<circle cx="50" cy="44" r="12" fill="${color}" opacity="0.75"/><circle cx="68" cy="40" r="9" fill="${color}" opacity="0.6"/><circle cx="58" cy="58" r="8" fill="${color}" opacity="0.65"/><ellipse cx="58" cy="64" rx="24" ry="7" fill="${color}" opacity="0.15"/>`,
+    `<rect x="36" y="38" width="20" height="24" rx="5" fill="${color}" opacity="0.7"/><circle cx="66" cy="50" r="11" fill="${color}" opacity="0.6"/><circle cx="50" cy="64" r="6" fill="${color}" opacity="0.5"/>`,
+    `<polygon points="58,28 74,58 42,58" fill="${color}" opacity="0.6"/><circle cx="58" cy="67" r="9" fill="${color}" opacity="0.65"/>`,
+    `<ellipse cx="58" cy="50" rx="20" ry="13" fill="${color}" opacity="0.7"/><circle cx="44" cy="38" r="7" fill="${color}" opacity="0.6"/><circle cx="72" cy="64" r="6" fill="${color}" opacity="0.55"/>`,
+    `<circle cx="50" cy="46" r="13" fill="${color}" opacity="0.7"/><circle cx="70" cy="56" r="10" fill="${color}" opacity="0.6"/><rect x="42" y="62" width="22" height="7" rx="3" fill="${color}" opacity="0.4"/>`,
+  ];
+  return `<svg viewBox="0 0 116 90" xmlns="http://www.w3.org/2000/svg" width="116" height="90">
+    <ellipse cx="58" cy="72" rx="38" ry="9" fill="${color}" opacity="0.1"/>
+    ${variants[(id-1) % variants.length]}
+  </svg>`;
+}
+
+function renderGrid(filter){
+  const grid = document.getElementById('grid');
+  const label = document.getElementById('sectionLabel');
+  const labels = {todos:'Todos os pratos', promocao:'Promoções', carne:'Carnes', especial:'Especiais'};
+  label.textContent = labels[filter] || 'Cardápio';
+
+  const filtered = filter === 'todos' ? items
+    : filter === 'promocao' ? items.filter(i => i.tag === 'Promoção')
+    : items.filter(i => i.cat === filter);
+
+  grid.innerHTML = filtered.map((item, idx) => `
+    <div class="card ${idx % 2 === 1 ? 'reverse' : ''}">
+      <div class="card-img" style="background:${item.color}18;">${plateSVG(item.color, item.id)}</div>
+      <div class="card-body">
+        <div>
+          <div class="card-tag">${item.tag}</div>
+          <div class="card-name">${item.name}</div>
+          <div class="card-desc">${item.desc}</div>
+        </div>
+        <div class="card-footer">
+          <div class="card-price">R$ ${item.price.toFixed(2).replace('.',',')}</div>
+          <button class="btn-add ${cart[item.id] ? 'added' : ''}" onclick="addCart(${item.id})">
+            ${cart[item.id] ? '✓ (' + cart[item.id] + ')' : '+ Adicionar'}
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addCart(id){
+  cart[id] = (cart[id] || 0) + 1;
+  updateCartBar();
+  const filter = document.querySelector('.filter-btn.active').dataset.cat;
+  renderGrid(filter);
+}
+
+function updateCartBar(){
+  const bar = document.getElementById('cartBar');
+  const total = Object.entries(cart).reduce((sum, [id, qty]) => {
+    const item = items.find(i => i.id == id);
+    return sum + (item ? item.price * qty : 0);
+  }, 0);
+  const count = Object.values(cart).reduce((a, b) => a + b, 0);
+  document.getElementById('cartCount').textContent = count;
+  document.getElementById('cartTotal').textContent = total.toFixed(2).replace('.', ',');
+  document.getElementById('navCount').textContent = count;
+  bar.classList.toggle('hidden', count === 0);
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    renderGrid(this.dataset.cat);
+  });
+});
+
+renderGrid('todos');
+</script>
+</body>
+</html>
